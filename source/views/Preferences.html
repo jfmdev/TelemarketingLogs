@@ -1,0 +1,26 @@
+<h2 class="text-center">Preferences</h2>
+
+<form> 
+    <div class="row" ng-show="showWarning"> 
+        <div class="large-6 large-offset-3 columns"> 
+            <div data-alert class="alert-box warning round">
+                Before continue, you must enter your name in the following form
+            </div>
+        </div> 
+    </div> 
+    
+    <div class="row"> 
+        <div class="large-6 large-offset-3 columns"> 
+            <label>
+                User name:
+                <input type="text" placeholder="Your name" ng-model="prefs.name" /> 
+            </label> 
+        </div> 
+    </div> 
+    
+    <div class="row"> 
+        <div class="large-6 large-offset-3 columns text-right"> 
+            <a href="" class="button tiny [radius round]" ng-click="save()">Save</a>
+        </div> 
+    </div> 
+</form>
