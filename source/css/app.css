@@ -16,6 +16,8 @@
     along with TelemarketingLogs. If not, see <http://www.gnu.org/licenses/>.
 */
 
+/* ----- Fonts ----- */
+
 @font-face {
     font-family: 'BlackJack';
     src: url('fonts/black_jack-webfont.eot');
@@ -26,6 +28,8 @@
     font-weight: normal;
     font-style: normal;
 }
+
+/* ----- Navigation bar ----- */
 
 nav.top-bar ul.title-area li.name h1 {
     color: white;
@@ -57,4 +61,14 @@ nav.top-bar ul a.project {
 
 .top-bar-section ul li.has-dropdown > a {
     cursor: default;
+}
+
+/* ----- Tables ----- */
+
+table {
+    margin: auto;
+}
+
+table tbody tr td > a.button.tiny {
+    margin: 0;
 }

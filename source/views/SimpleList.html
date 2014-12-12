@@ -1,0 +1,37 @@
+<h2 class="text-center">{{title}}</h2>
+
+<div class="row"> 
+    <div class="large-6 large-offset-3 columns" ng-show="rows.length > 0"> 
+        <table>
+             <thead>
+                <tr>
+                   <th>Id</th>
+                   <th>Name</th>
+                   <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in rows | orderBy:'name'">
+                    <td>{{row.id}}</td>
+                    <td>{{row.name}}</td>
+                    <td>
+                        <a ng-href="#/edit/{{type}}/{{row.id}}" class="button tiny">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br/>
+    </div> 
+    
+    <div class="large-6 large-offset-3 text-center alert-box secondary radius" ng-show="rows.length <= 0">
+        No data available
+    </div>
+</div>
+
+<div class="row"> 
+    <div class="large-6 large-offset-3 columns text-center"> 
+        <a ng-href="#/edit/{{type}}/new" class="button success tiny">Add new</a>
+    </div>
+</div> 
+
+

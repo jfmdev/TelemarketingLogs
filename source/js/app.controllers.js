@@ -17,19 +17,46 @@
 */
 
 // Create module for the controllers.
-var teleLogsCtrls = angular.module('teleLogsCtrls', ['ngAnimate', 'toastr']);
+var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'toastr']);
+
+// Create controller for projects.
+teloCtrls.controller('ProjectsController', function ($scope) {
+            
+});
+
+// Create controller for the navigation var.
+teloCtrls.controller('NavBarController', function ($scope) {
+    $scope.file = "Untitled";
+});
+
+// Create controller for simple lists.
+teloCtrls.controller('SimpleListController', function ($scope, $routeParams) {
+    // Define type, title and columns.
+    $scope.type = $routeParams.type === 'results'? 'result' : ($routeParams.type === 'users'? 'user' : 'status');
+    $scope.title = teloUtil.firstToUppercase($routeParams.type);
+    $scope.columns = ['id', 'name'];
+    if($scope.type !== 'user') $scope.columns.push('order');
+    
+    // Get rows.
+    $scope.rows = taffyDB({type: $scope.type}).get();
+});
+
+// Create controller for simple forms.
+teloCtrls.controller('SimpleFormController', function ($scope) {
+            
+});
 
 // Create controller for preferences.
-teleLogsCtrls.controller('PreferencesController', function ($scope, $routeParams, $location, toastr) {
+teloCtrls.controller('PreferencesController', function ($scope, $routeParams, $location, toastr) {
     // Verify if the warning must be show.
-    $scope.showWarning = !teleLogsUtil.isUserNameDefined() && $routeParams.flag === 'nameNeed';
+    $scope.showWarning = !teloUtil.isUserNameDefined() && $routeParams.flag === 'nameNeed';
     
     // Initialize variables related to the success message.
     $scope.showSuccess = false;
     
     // Initialize preferences.
     $scope.prefs = {
-        name: teleLogsUtil.getUserName()
+        name: teloUtil.getUserName()
     };
     
     // Define autocomplete values for the name field.
@@ -38,7 +65,7 @@ teleLogsCtrls.controller('PreferencesController', function ($scope, $routeParams
     // Define action for submit the form.
     $scope.save = function() {
         // Save the user name.
-        teleLogsUtil.setUserName($scope.prefs.name);
+        teloUtil.setUserName($scope.prefs.name);
         
         // Show success message.
         toastr.success('Your preferences have been updated', '', {closeButton: true, timeOut:2000});
@@ -46,7 +73,7 @@ teleLogsCtrls.controller('PreferencesController', function ($scope, $routeParams
         // Verify if the user was redirected for having an empty username.
         if($routeParams.flag === 'nameNeed') {
             // Verify if the user put a name.
-            if(teleLogsUtil.isUserNameDefined()) {
+            if(teloUtil.isUserNameDefined()) {
                 // Redirect to original section.
                 $location.path("/");
             }
@@ -54,7 +81,3 @@ teleLogsCtrls.controller('PreferencesController', function ($scope, $routeParams
     };
 });
 
-// Create controller for projects.
-teleLogsCtrls.controller('ProjectsController', function ($scope) {
-            
-});

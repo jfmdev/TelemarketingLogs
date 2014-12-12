@@ -16,7 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with TelemarketingLogs. If not, see <http://www.gnu.org/licenses/>.
 -->
-<html>
+<html ng-app="teloApp">
 <head>
     <title>TelemarketingLogs</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -55,9 +55,9 @@
     <script type="text/javascript" src="js/app.controllers.js"></script>
     <script type="text/javascript" src="js/app.main.js"></script>
 </head>
-<body ng-app="teleLogsApp">
+<body>
 
-<nav class="top-bar" data-topbar="" role="navigation"> 
+<nav class="top-bar" data-topbar="" role="navigation" ng-controller="NavBarController"> 
     <ul class="title-area"> 
         <li class="name"> 
             <h1>Telemarketing Logs</h1> 
@@ -65,18 +65,25 @@
     </ul> 
     <section class="top-bar-section"> <!-- Right Nav Section --> 
         <ul class="left"> 
-            <li><a class="project" href="index.html#/"><span>Unnamed*</span></a></li> 
+            <li><a class="project" href="index.html#/"><span>{{file}}</span></a></li> 
             <li><a href="#/"><span>New</span></a></li> 
-            <li><a href="#/"><span>Open</span></a></li> 
+            <li class="has-dropdown">
+                <a href="#/">Open</a>
+                <ul class="dropdown">
+                    <li><a href="#/open/local"><span>Local file</span></a></li> 
+                    <li><a href="#/open/dropbox"><span>Dropbox</span></a></li> 
+                    <li><a href="#/open/drive"><span>Google Drive</span></a></li> 
+                </ul>
+            </li> 
             <li><a href="#/"><span>Save</span></a></li> 
         </ul> 
         <ul class="right"> 
             <li class="has-dropdown">
                 <a href="">Settings</a>
                 <ul class="dropdown">
-                    <li><a href="#/"><span>Users</span></a></li> 
-                    <li><a href="#/"><span>Statuses</span></a></li> 
-                    <li><a href="http://google.com/"><span>Results</span></a></li> 
+                    <li><a href="#/list/users"><span>Users</span></a></li> 
+                    <li><a href="#/list/statuses"><span>Statuses</span></a></li> 
+                    <li><a href="#/list/results"><span>Results</span></a></li> 
                     <li><a href="#/preferences"><span>Preferences</span></a></li> 
                 </ul>
             </li>         
@@ -101,8 +108,11 @@ id contacto estado resultado comentario fecha_ideal fecha_real
 faltaria agregar la clase 'active' a los botones de la barra superior segun la seccion
 no olvidar agregar una sección de ayuda, con una base de datos de prueba/referencia
 
-falta agregar el autocompletar en los settings
-usar ngToast para mostrar el mensaje de que los cambios se guardaron
+falta agregar el autocompletar en los settings cuando se elige el nombre
+
+faltaria ver como hacer para agregar un controlador en el header, cosa de poder cambiar el nombre del archivo editandose
+    http://gon.to/2013/03/23/the-right-way-of-coding-angularjs-how-to-organize-a-regular-webapp/
+    http://gon.to/2013/03/23/the-right-way-of-coding-angularjs-how-to-organize-a-regular-webapp/
 -->
     <script type="text/javascript">
         //= require foundation

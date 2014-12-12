@@ -17,20 +17,24 @@
 */
 
 // Create module for the application.
-var teleLogsApp = angular.module('teleLogsApp', ['ngRoute', 'teleLogsCtrls']);
+var teloApp = angular.module('teloApp', ['ngRoute', 'teloCtrls']);
 
 // Define routes.
-teleLogsApp.config(['$routeProvider', function($routeProvider) {
+teloApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider
         .when('/', {
             controller: 'ProjectsController',
             templateUrl: 'views/Projects.html'
         })
-        .when('/preferences/', {
-            controller: 'PreferencesController',
-            templateUrl: 'views/Preferences.html'
+        .when('/list/:type', {
+            controller: 'SimpleListController',
+            templateUrl: 'views/SimpleList.html'
         })
-        .when('/preferences/:flag', {
+        .when('/edit/:type/:id?', {
+            controller: 'SimpleFormController',
+            templateUrl: 'views/SimpleForm.html'
+        })
+        .when('/preferences/:flag?', {
             controller: 'PreferencesController',
             templateUrl: 'views/Preferences.html'
         })
@@ -41,14 +45,27 @@ teleLogsApp.config(['$routeProvider', function($routeProvider) {
 
 
 // Add listener for change of routes.
-teleLogsApp.run(function($rootScope, $location) {
+teloApp.run(function($rootScope, $location) {
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
         // Verify if the user has selected a name.
-        if (!teleLogsUtil.isUserNameDefined()) {
+        if (!teloUtil.isUserNameDefined()) {
             // The user must choose a name, redirect to the preferences section (if this is not the current destination).
             if ( next.templateUrl !== "views/Preferences.html") {
                 $location.path("/preferences/nameNeed");            
             }
         }
     });
+});
+
+// Function executed after the page has been loaded.
+angular.element(document).ready(function () {
+    // TODO: Verificar si la base de datos esta vacia
+
+    // If the database is empty, add default data.
+    if(teloUtil.isUserNameDefined()) taffyDB.insert({id: teloUtil.getNextId(), type: 'user', name: amplify.store("username")});
+    taffyDB.insert({id: teloUtil.getNextId(), type: 'status', order: 1, name: 'Pending'});
+    taffyDB.insert({id: teloUtil.getNextId(), type: 'status', order: 2, name: 'Done'});
+    taffyDB.insert({id: teloUtil.getNextId(), type: 'status', order: 3, name: 'Cancelled'});
+    taffyDB.insert({id: teloUtil.getNextId(), type: 'result', order: 1, name: 'Success'});
+    taffyDB.insert({id: teloUtil.getNextId(), type: 'result', order: 2, name: 'Failure'});
 });

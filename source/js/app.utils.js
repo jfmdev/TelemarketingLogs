@@ -17,30 +17,38 @@
 */
 
 // Declare namespace.
-var teleLogsUtil = {};
+var teloUtil = {};
 
 // Declare database.
 var taffyDB = TAFFY();
+
+/**
+ * Gets the new id to use in the database.
+ * 
+ * @returns {Number} The next id to use in the database.
+ */
+teloUtil.getNextId = function() {
+    var id = 1;
+    if(taffyDB().count() > 0) {
+        id = taffyDB().order('id desc').first().id + 1;
+    }
+    return id;
+};
 
 /**
  * Store the user's name in the browser's local storage.
  * 
  * @param {string} name The user's name.
  */
-teleLogsUtil.setUserName = function(name) {
+teloUtil.setUserName = function(name) {
     // Save name in the local storage.
     amplify.store("username", name);
     
     // Verify if the name must be added into the database.
     var exists = taffyDB({type:"user", name: name});
     if(exists.count() <= 0) {
-        // The name must be added. Define the row's id.
-        var id = 1;
-        if(taffyDB().count() > 0) {
-            id = taffyDB().order('id desc').first().id + 1;
-        }
-        
         // Add the name to the database.
+        var id = teloUtil.getNextId();
         taffyDB.insert({id: id, type: "user", name: name});
     }
 };
@@ -50,7 +58,7 @@ teleLogsUtil.setUserName = function(name) {
  * 
  * @returns {string} The user's name.
  */
-teleLogsUtil.getUserName = function() {
+teloUtil.getUserName = function() {
     var res = amplify.store("username");
     return res !== null && res !== undefined? res : '';
 };
@@ -60,7 +68,13 @@ teleLogsUtil.getUserName = function() {
  * 
  * @returns {boolean} 'true' is the user's name is defined, 'false' otherwise.
  */
-teleLogsUtil.isUserNameDefined = function() {
-    var name = teleLogsUtil.getUserName();
+teloUtil.isUserNameDefined = function() {
+    var name = teloUtil.getUserName();
     return name.length > 0;
 };
+
+teloUtil.firstToUppercase = function(someString) {
+    var res = '';
+    if(res !== undefined && res !== null) res = someString.charAt(0).toUpperCase() + someString.slice(1);
+    return res;
+}
