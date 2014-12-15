@@ -156,13 +156,6 @@ teloApp.factory('metadataFactory', function() {
 
 // Function executed after the page has been loaded.
 angular.element(document).ready(function () {
-    // TODO: Verificar si la base de datos esta vacia
-
-    // If the database is empty, add default data.
-    if(teloUtil.isUserNameDefined()) taffyDB.insert({id: teloUtil.getNextId(), type: 'user', name: amplify.store("username")});
-    taffyDB.insert({id: teloUtil.getNextId(), type: 'status', order: 1, name: 'Pending'});
-    taffyDB.insert({id: teloUtil.getNextId(), type: 'status', order: 2, name: 'Done'});
-    taffyDB.insert({id: teloUtil.getNextId(), type: 'status', order: 3, name: 'Cancelled'});
-    taffyDB.insert({id: teloUtil.getNextId(), type: 'result', order: 1, name: 'Success'});
-    taffyDB.insert({id: teloUtil.getNextId(), type: 'result', order: 2, name: 'Failure'});
+    // Load default data into the database.
+    teloUtil.cleanDB();
 });

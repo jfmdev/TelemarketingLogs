@@ -66,8 +66,11 @@
     <section class="top-bar-section">
         <ul class="left"> 
             <li><a class="project" href="index.html#/"><span>{{file}}</span></a></li> 
-            <li><a href="#/"><span>New</span></a></li> 
-            <li><a href="#/"><span>Open</span></a></li> 
+            <li><a href="" ng-click="clean()"><span>New</span></a></li> 
+            <li>
+                <a href="" ng-click="importLocal()"><span>Open</span></a>
+                <input type="file" id="file_import" class="hide" />
+            </li> 
             <!--
             <li class="has-dropdown">
                 <a href="#/">Open</a>
@@ -78,9 +81,10 @@
                 </ul>
             </li>
             -->
-            <li><a href="#/"><span>Save</span></a></li> 
+            <li><a href="" ng-click="downloadData()"><span>Save</span></a></li> 
         </ul> 
         <ul class="right"> 
+            <li><a href="index.html#/"><span>Registers</span></a></li> 
             <li><a href="#/list/contacts"><span>Contacts</span></a></li> 
             <li class="has-dropdown">
                 <a href="">Settings</a>
@@ -99,20 +103,17 @@
 <div ng-view></div>
 
 <!--
-al principio, implementar open y save solo con archivos locales (lo del open podria verlo con diagraph)
-despues agregar soporte para dropbox y drive
+al hacer new y open, pedir confirmacion
+    para ello, utilizar el modulo ngDialog (https://github.com/likeastore/ngDialog)
+    tambien reemplazar el dialog utilizado al querer borrar un registro (tengo que modificar SimpleForm.html para eliminar el div y SimpleFormController para cambiar el codigo)
 
-luego verificar que no permite borrar results, users y statuses que esten referenciados en las calls
+luego (de agregar calls) verificar que no permite borrar results, users y statuses que esten referenciados en las calls
 
 falta agregar el autocompletar en los settings cuando se elige el nombre
 
-poner el toastr en la parte de abajo, no arriba
+agregar soporte para dropbox y drive
 
-Llamada:
-id contacto estado resultado comentario fecha_ideal fecha_real
-(solo en el formulario: checkbox para volver a llama, checkbox para no llamar nunca mas)
-
-no olvidar agregar una sección de ayuda, con una base de datos de prueba/referencia
+no olvidar agregar una sección de ayuda
 -->
     <script type="text/javascript">
         //= require foundation

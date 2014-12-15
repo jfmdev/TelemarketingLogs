@@ -25,8 +25,59 @@ teloCtrls.controller('ProjectController', function ($scope) {
 });
 
 // Create controller for the navigation var.
-teloCtrls.controller('NavBarController', function ($scope) {
+teloCtrls.controller('NavBarController', function ($scope, $route, toastr) {
     $scope.file = "Untitled";
+    
+    // Clean the database.
+    $scope.clean = function() {
+        // Ask for confirmation.
+        
+        // Clean database and file's name. 
+        $scope.file = "Untitled";
+        teloUtil.cleanDB();
+        
+        // Show message.
+        toastr.success('The database has been cleaned', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
+        
+        // Reload the view.
+        $route.reload();
+    };
+    
+    // Export all data to a file.
+    $scope.downloadData = function() {
+        var blob = new Blob([JSON.stringify( taffyDB().get() )], {type: "text/plain;charset=utf-8"});
+        var filename = $scope.file.indexOf('.tml') < 0? $scope.file + '.tml' : $scope.file;
+        saveAs(blob, filename);
+    };
+    
+    // Import a local file.
+    $scope.importLocal = function() {
+        // Ask for confirmation.
+        
+        // Trigger click event on input file element.
+        angular.element('#file_import').trigger('click');
+    };
+    
+    // Actions for when a file has been read.
+    $scope.fileRead = function(res, name) {
+        // Verify if the read was a success or a failure.
+        if(res) {
+            // Update file name.
+            if(name !== undefined && name !== null) $scope.file = name;
+            
+            // Show toast message.
+            toastr.success('The file has been opened', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
+            
+            // Reload view.
+            $route.reload();
+        } else {
+            // Show an error message.
+            toastr.error('The file could not be opened', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
+        }
+    };
+    
+    // Add event for read the file selected.
+    document.getElementById('file_import').addEventListener('change', function(evt) { teloUtil.readFile(evt, $scope.fileRead ) }, false);
 });
 
 // Create controller for simple lists.
@@ -129,7 +180,7 @@ teloCtrls.controller('PreferencesController', function ($scope, $routeParams, $l
         teloUtil.setUserName($scope.prefs.name);
         
         // Show success message.
-        toastr.success('Your preferences have been updated', '', {closeButton: true, timeOut:2000});
+        toastr.success('Your preferences have been updated', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
 
         // Verify if the user was redirected for having an empty username.
         if($routeParams.flag === 'nameNeed') {
