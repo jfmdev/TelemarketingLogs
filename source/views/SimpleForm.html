@@ -1,16 +1,36 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<h2 class="text-center">{{title}}</h2>
+
+<div class="row">
+    <div class="large-6 large-offset-3 columns">
+        <div class="row" ng-repeat="column in columns">
+            <label ng-if="column !== 'id'">{{labels[$index]}}
+                <input type="text" ng-model="entry[column]" />
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-4 large-offset-4 columns">
+        <div class="medium-4 columns text-center">
+            <a ng-click="cancel()" href="" class="button info tiny">Cancel</a>
+        </div>
+        <div class="medium-4 columns text-center">
+            <a ng-click="delete()" ng-show="entry.id !== null" href="" class="button alert tiny">Delete</a>
+        </div>
+        <div class="medium-4 columns text-center">
+            <a ng-click="save()" href="" class="button success tiny">Save</a>
+        </div>
+    </div>
+</div>
+
+
+<div id="simple_form_modal" class="reveal-modal" data-reveal>
+    <div class="row text-center">
+        <p>Are you sure that you want to delete the {{entry.type}} "{{entry.name}}"?</p>
+    </div>
+    <div class="row">
+        <div class="small-6 columns text-center"><a ng-click="delete(false)" href="" class="button info small">No, keep the {{entry.type}}</a></div>
+        <div class="small-6 columns text-center"><a ng-click="delete(true)" href="" class="button alert small">Yes, delete "{{entry.name}}"</a></div>
+    </div>
+</div>

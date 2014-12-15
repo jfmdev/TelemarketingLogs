@@ -23,8 +23,8 @@ var teloApp = angular.module('teloApp', ['ngRoute', 'teloCtrls']);
 teloApp.config(['$routeProvider', function($routeProvider) {
     $routeProvider
         .when('/', {
-            controller: 'ProjectsController',
-            templateUrl: 'views/Projects.html'
+            controller: 'SimpleListController',
+            templateUrl: 'views/SimpleList.html'
         })
         .when('/list/:type', {
             controller: 'SimpleListController',
@@ -33,6 +33,10 @@ teloApp.config(['$routeProvider', function($routeProvider) {
         .when('/edit/:type/:id?', {
             controller: 'SimpleFormController',
             templateUrl: 'views/SimpleForm.html'
+        })
+        .when('/project/:id?', {
+            controller: 'ProjectController',
+            templateUrl: 'views/Project.html'
         })
         .when('/preferences/:flag?', {
             controller: 'PreferencesController',
@@ -55,6 +59,94 @@ teloApp.run(function($rootScope, $location) {
             }
         }
     });
+});
+
+// Define factory for get the metadata of each type.
+teloApp.factory('metadataFactory', function() {
+    var metadata = {
+        user : {
+            fields: ['id', 'name'],
+            types: ['number', 'text'],
+            plural: 'users'
+        },
+        result : {
+            fields: ['id', 'name', 'order'],
+            types: ['number', 'text', 'number'],
+            plural: 'results'
+        },
+        status : {
+            fields: ['id', 'name', 'order'],
+            types: ['number', 'text', 'number'],
+            plural: 'statuses'
+        },
+        project  : {
+            fields: ['id', 'name'],
+            types: ['number', 'text'],
+            plural: 'projects'
+        }
+    };
+    
+    var factory = {};
+    
+    /**
+     * Returns the column names of a type.
+     * 
+     * @param {String} type The type's name.
+     * @returns {Array} A list of strings.
+     */
+    factory.getColumns = function(type) {
+        return metadata[type].fields;
+    };
+
+    /**
+     * Returns the column labels of a type.
+     * 
+     * @param {String} type The type's name.
+     * @returns {Array} A list of strings.
+     */
+    factory.getColumnNames = function(type) {
+        var res = [];
+        for(var i=0; i<metadata[type].fields.length; i++) {
+            res.push(teloUtil.firstToUppercase(metadata[type].fields[i]));
+        }
+        return res;
+    };
+
+    /**
+     * Returns the column date types of a type.
+     * 
+     * @param {String} type The type's name.
+     * @returns {Array} A list of strings.
+     */
+    factory.getColumnDataTypes = function(type) {
+        return metadata[type].types;
+    };
+
+    /**
+     * Get the plural name of a type.
+     * 
+     * @param {String} type A type name.
+     * @returns {String} The type's name in plural.
+     */
+    factory.getPlural = function(type) {
+        return metadata[type].plural;
+    };
+    
+    /**
+     * Get the type of a plural name.
+     * 
+     * @param {String} plural The type's name in plural.
+     * @returns {String} The type's name in singular.
+     */
+    factory.getType = function(plural) {
+        var typeName = '';
+        for(var type in metadata) {
+            if(metadata[type].plural === plural.toLowerCase()) typeName = type;
+        }
+        return typeName;
+    };
+    
+    return factory;
 });
 
 // Function executed after the page has been loaded.

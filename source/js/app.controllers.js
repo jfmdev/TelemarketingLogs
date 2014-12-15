@@ -20,7 +20,7 @@
 var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'toastr']);
 
 // Create controller for projects.
-teloCtrls.controller('ProjectsController', function ($scope) {
+teloCtrls.controller('ProjectController', function ($scope) {
             
 });
 
@@ -30,20 +30,79 @@ teloCtrls.controller('NavBarController', function ($scope) {
 });
 
 // Create controller for simple lists.
-teloCtrls.controller('SimpleListController', function ($scope, $routeParams) {
+teloCtrls.controller('SimpleListController', function ($scope, $routeParams, metadataFactory) {
     // Define type, title and columns.
-    $scope.type = $routeParams.type === 'results'? 'result' : ($routeParams.type === 'users'? 'user' : 'status');
-    $scope.title = teloUtil.firstToUppercase($routeParams.type);
-    $scope.columns = ['id', 'name'];
-    if($scope.type !== 'user') $scope.columns.push('order');
+    $scope.type = 'project';
+    if($routeParams.type !== undefined && $routeParams.type !== null) {
+        $scope.type = metadataFactory.getType($routeParams.type);
+    }
+    $scope.title = teloUtil.firstToUppercase(metadataFactory.getPlural($scope.type));
+    $scope.columns = metadataFactory.getColumns($scope.type);
+    $scope.labels = metadataFactory.getColumnNames($scope.type);
+    $scope.predicate = $scope.columns.indexOf('order') < 0? "name" : 'order';
+    $scope.baseEditUrl = $scope.type !== 'project'? "#/edit/" + $scope.type : "#/project";
     
     // Get rows.
     $scope.rows = taffyDB({type: $scope.type}).get();
 });
 
 // Create controller for simple forms.
-teloCtrls.controller('SimpleFormController', function ($scope) {
-            
+teloCtrls.controller('SimpleFormController', function ($scope, $routeParams, $window, $location, metadataFactory) {
+    // Get row to edit.
+    $scope.entry = null;
+    if($routeParams.id !== undefined && $routeParams.id !== null && $routeParams.id !== 'new') {
+        // Get object from the database.
+        $scope.entry = taffyDB({id: parseInt($routeParams.id, 10)}).first();
+    }
+    
+    // If no entry has been read from the database, create an empty object.
+    if($scope.entry === undefined || $scope.entry === null) {
+        $scope.entry = {};
+        var columns = metadataFactory.getColumns($routeParams.type);
+        for(var i=0; i<columns.length; i++) {
+            $scope.entry[columns[i]] = null;
+        }
+        $scope.entry.type = $routeParams.type;
+    }
+
+    // Define labels and fields.
+    $scope.title = teloUtil.firstToUppercase($routeParams.type);
+    $scope.columns = metadataFactory.getColumns($routeParams.type);
+    $scope.labels = metadataFactory.getColumnNames($routeParams.type);
+    $scope.datatypes = metadataFactory.getColumnDataTypes($routeParams.type);
+    
+    // Define behaviour for the cancel button.
+    $scope.cancel = function() {
+        $window.history.back();
+    };
+    
+    // Define behaviour for the save button.
+    $scope.save = function() {
+        if($scope.entry.id === null || $scope.entry.id === undefined) {
+            $scope.entry.id = teloUtil.getNextId();
+            taffyDB.insert($scope.entry);
+        } else {
+            taffyDB({id: $scope.entry.id}).update($scope.entry);
+        }
+        $location.path("/list/" + metadataFactory.getPlural($scope.entry.type));
+    };
+    
+    // Define behaviour for the delete button.
+    $scope.delete = function(res) {
+        if(res !== false && res !== true) {
+            // Show confirmation dialog.
+            jQuery('#simple_form_modal').foundation('reveal', 'open');
+        } else {
+            // Close confirmation dialog.
+            jQuery('#simple_form_modal').foundation('reveal', 'close');
+
+            // Verify if the entry must be deleted.
+            if(res === true) {
+                taffyDB({id: $scope.entry.id}).remove();
+                $location.path("/list/" + metadataFactory.getPlural($scope.entry.type));
+            }
+        }
+    };
 });
 
 // Create controller for preferences.

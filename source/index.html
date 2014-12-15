@@ -63,10 +63,12 @@
             <h1>Telemarketing Logs</h1> 
         </li> 
     </ul> 
-    <section class="top-bar-section"> <!-- Right Nav Section --> 
+    <section class="top-bar-section">
         <ul class="left"> 
             <li><a class="project" href="index.html#/"><span>{{file}}</span></a></li> 
             <li><a href="#/"><span>New</span></a></li> 
+            <li><a href="#/"><span>Open</span></a></li> 
+            <!--
             <li class="has-dropdown">
                 <a href="#/">Open</a>
                 <ul class="dropdown">
@@ -74,7 +76,8 @@
                     <li><a href="#/open/dropbox"><span>Dropbox</span></a></li> 
                     <li><a href="#/open/drive"><span>Google Drive</span></a></li> 
                 </ul>
-            </li> 
+            </li>
+            -->
             <li><a href="#/"><span>Save</span></a></li> 
         </ul> 
         <ul class="right"> 
@@ -95,24 +98,18 @@
 <div ng-view></div>
 
 <!--
-'Login' -> en realidad, solo se pide un nombre
-Contactos
-Grupos de llamadas
-Estados
-Resultados
+al principio, implementar open y save solo con archivos locales (lo del open podria verlo con diagraph)
+despues agregar soporte para dropbox y drive
+
+falta agregar el autocompletar en los settings cuando se elige el nombre
+
+poner el toastr en la parte de abajo, no arriba
 
 Llamada:
 id contacto estado resultado comentario fecha_ideal fecha_real
 (solo en el formulario: checkbox para volver a llama, checkbox para no llamar nunca mas)
 
-faltaria agregar la clase 'active' a los botones de la barra superior segun la seccion
 no olvidar agregar una sección de ayuda, con una base de datos de prueba/referencia
-
-falta agregar el autocompletar en los settings cuando se elige el nombre
-
-faltaria ver como hacer para agregar un controlador en el header, cosa de poder cambiar el nombre del archivo editandose
-    http://gon.to/2013/03/23/the-right-way-of-coding-angularjs-how-to-organize-a-regular-webapp/
-    http://gon.to/2013/03/23/the-right-way-of-coding-angularjs-how-to-organize-a-regular-webapp/
 -->
     <script type="text/javascript">
         //= require foundation

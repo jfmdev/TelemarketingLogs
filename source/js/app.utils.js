@@ -36,9 +36,23 @@ teloUtil.getNextId = function() {
 };
 
 /**
+ * Gets the new order to use in a table of the database.
+ * 
+ * @param {String} type The table's type.
+ * @returns {Number} The next order to use in a table.
+ */
+teloUtil.getNextOrder = function(type) {
+    var ord = 1;
+    if(taffyDB({type: type}).count() > 0) {
+        ord = taffyDB({type: type}).order('order desc').first().order + 1;
+    }
+    return ord;
+};
+
+/**
  * Store the user's name in the browser's local storage.
  * 
- * @param {string} name The user's name.
+ * @param {String} name The user's name.
  */
 teloUtil.setUserName = function(name) {
     // Save name in the local storage.
@@ -56,7 +70,7 @@ teloUtil.setUserName = function(name) {
 /**
  * Get the user's name, stored in the browser's local storage.
  * 
- * @returns {string} The user's name.
+ * @returns {String} The user's name.
  */
 teloUtil.getUserName = function() {
     var res = amplify.store("username");
@@ -66,15 +80,26 @@ teloUtil.getUserName = function() {
 /**
  * Verify if the user has defined his name.
  * 
- * @returns {boolean} 'true' is the user's name is defined, 'false' otherwise.
+ * @returns {Boolean} 'true' is the user's name is defined, 'false' otherwise.
  */
 teloUtil.isUserNameDefined = function() {
     var name = teloUtil.getUserName();
     return name.length > 0;
 };
 
+/**
+ * Transform the first letter of an string to uppercase.
+ * 
+ * @param {String} someString An string.
+ * @returns {String} An string with the first letter uppercased.
+ */
 teloUtil.firstToUppercase = function(someString) {
     var res = '';
-    if(res !== undefined && res !== null) res = someString.charAt(0).toUpperCase() + someString.slice(1);
+    if(res !== undefined && res !== null) {
+        if(someString.length > 1)
+            res = someString.charAt(0).toUpperCase() + someString.slice(1);
+        else
+            res = someString.toUpperCase();
+    }
     return res;
-}
+};
