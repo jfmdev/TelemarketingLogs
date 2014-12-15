@@ -3,8 +3,15 @@
 <div class="row">
     <div class="large-6 large-offset-3 columns">
         <div class="row" ng-repeat="column in columns">
-            <label ng-if="column !== 'id'">{{labels[$index]}}
+            <label ng-if="column !== 'id' && (datatypes[$index] === 'text' || datatypes[$index] === 'number')">{{labels[$index]}}
                 <input type="text" ng-model="entry[column]" />
+            </label>
+            <label ng-if="datatypes[$index] === 'bool'">
+                <input type="checkbox" ng-model="entry[column]" />
+                {{labels[$index]}}
+            </label>
+            <label ng-if="datatypes[$index] === 'textarea'">{{labels[$index]}}
+                <textarea ng-model="entry[column]"></textarea>
             </label>
         </div>
     </div>
@@ -16,7 +23,7 @@
             <a ng-click="cancel()" href="" class="button info tiny">Cancel</a>
         </div>
         <div class="medium-4 columns text-center">
-            <a ng-click="delete()" ng-show="entry.id !== null" href="" class="button alert tiny">Delete</a>
+            <a ng-click="delete()" ng-show="canBeDeleted" href="" class="button alert tiny">Delete</a>
         </div>
         <div class="medium-4 columns text-center">
             <a ng-click="save()" href="" class="button success tiny">Save</a>

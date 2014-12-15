@@ -79,6 +79,11 @@ teloApp.factory('metadataFactory', function() {
             types: ['number', 'text', 'number'],
             plural: 'statuses'
         },
+        contact  : {
+            fields: ['id', 'name', 'telephone', 'cellphone', 'availability', 'active'],
+            types: ['number', 'text', 'text', 'text', 'textarea', 'bool'],
+            plural: 'contacts'
+        },
         project  : {
             fields: ['id', 'name'],
             types: ['number', 'text'],

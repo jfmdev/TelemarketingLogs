@@ -38,6 +38,7 @@ teloCtrls.controller('SimpleListController', function ($scope, $routeParams, met
     }
     $scope.title = teloUtil.firstToUppercase(metadataFactory.getPlural($scope.type));
     $scope.columns = metadataFactory.getColumns($scope.type);
+    $scope.datatypes = metadataFactory.getColumnDataTypes($scope.type);
     $scope.labels = metadataFactory.getColumnNames($scope.type);
     $scope.predicate = $scope.columns.indexOf('order') < 0? "name" : 'order';
     $scope.baseEditUrl = $scope.type !== 'project'? "#/edit/" + $scope.type : "#/project";
@@ -70,6 +71,7 @@ teloCtrls.controller('SimpleFormController', function ($scope, $routeParams, $wi
     $scope.columns = metadataFactory.getColumns($routeParams.type);
     $scope.labels = metadataFactory.getColumnNames($routeParams.type);
     $scope.datatypes = metadataFactory.getColumnDataTypes($routeParams.type);
+    $scope.canBeDeleted = teloUtil.canBeDeleted($scope.entry);
     
     // Define behaviour for the cancel button.
     $scope.cancel = function() {

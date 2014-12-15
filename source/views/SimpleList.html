@@ -5,13 +5,16 @@
         <table>
              <thead>
                 <tr>
-                   <th ng-repeat-start="label in labels" ng-repeat-end>{{label}}</th>
+                   <th ng-repeat-start="label in labels" ng-if="datatypes[$index] !== 'textarea'" ng-repeat-end>{{label}}</th>
                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="row in rows | orderBy: predicate">
-                    <td ng-repeat-start="column in columns" ng-repeat-end>{{row[column]}}</td>
+                    <td ng-repeat-start="column in columns" ng-if="datatypes[$index] !== 'textarea'" ng-repeat-end>
+                        <span ng-if="datatypes[$index] !== 'bool'">{{row[column]}}</span>
+                        <img ng-if="datatypes[$index] === 'bool'" src="img/icon/{{row[column]? 'ok.png' : 'delete.png'}}" alt="{{row[column]}}" />
+                    </td>
                     <td>
                         <a ng-href="{{baseEditUrl}}/{{row.id}}" class="button tiny">Edit</a>
                     </td>

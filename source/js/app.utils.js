@@ -103,3 +103,18 @@ teloUtil.firstToUppercase = function(someString) {
     }
     return res;
 };
+
+/**
+ * Verify if an entry can be deleted (i.e. do not is referenced by any other entry).
+ * 
+ * @param {object} entry The entry to delete.
+ * @returns {String} 'true' if the entry can be delete, 'false' otherwise.
+ */
+teloUtil.canBeDeleted = function(entry) {
+    if(entry.id === undefined || entry.id === null || entry.id < 0) return false;
+    if(entry.type === 'user' && (entry.name === teloUtil.getUserName() || taffyDB({type: 'call', user_id: entry.id}).count() > 0)) return false;
+    if(entry.type === 'result' && taffyDB({type: 'call', result_id: entry.id}).count() > 0) return false;
+    if(entry.type === 'status' && taffyDB({type: 'call', status_id: entry.id}).count() > 0) return false;
+    if(entry.type === 'contact' && taffyDB({type: 'call', contact_id: entry.id}).count() > 0) return false;
+    return true;
+};
