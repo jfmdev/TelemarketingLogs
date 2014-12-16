@@ -72,3 +72,14 @@ table {
 table tbody tr td > a.button.tiny {
     margin: 0;
 }
+
+/* ----- Misc ----- */
+
+a.button.no-margin {
+    margin: 0;
+}
+
+div.ngdialog-theme-default.confirm-dialog div.ngdialog-content {
+    width: 50%;
+    background-color: white;
+}

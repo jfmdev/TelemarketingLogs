@@ -17,7 +17,7 @@
 */
 
 // Create module for the controllers.
-var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'toastr']);
+var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'ngDialog', 'toastr']);
 
 // Create controller for projects.
 teloCtrls.controller('ProjectController', function ($scope) {
@@ -25,22 +25,36 @@ teloCtrls.controller('ProjectController', function ($scope) {
 });
 
 // Create controller for the navigation var.
-teloCtrls.controller('NavBarController', function ($scope, $route, toastr) {
+teloCtrls.controller('NavBarController', function ($scope, $route, toastr, ngDialog) {
     $scope.file = "Untitled";
     
     // Clean the database.
     $scope.clean = function() {
         // Ask for confirmation.
-        
-        // Clean database and file's name. 
-        $scope.file = "Untitled";
-        teloUtil.cleanDB();
-        
-        // Show message.
-        toastr.success('The database has been cleaned', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
-        
-        // Reload the view.
-        $route.reload();
+        var confirmDialog = ngDialog.open({
+            template: 'views/ConfirmDialog.html',
+            className: 'ngdialog-theme-default confirm-dialog',
+            controller: function($scope) {
+                $scope.message = "Are you sure that you want to create a new file (all the current information is going to be lost)?";
+                $scope.acceptLabel = "Yes, create a new file";
+                $scope.cancelLabel = "No, keep current data";
+                $scope.accept = function() { 
+                    // Close dialog.
+                    confirmDialog.close(); 
+
+                    // Clean database and file's name. 
+                    $scope.file = "Untitled";
+                    teloUtil.cleanDB();
+
+                    // Show message.
+                    toastr.success('The database has been cleaned', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
+
+                    // Reload the view.
+                    $route.reload();
+                };
+                $scope.cancel = function() { confirmDialog.close(); };
+            }
+        });
     };
     
     // Export all data to a file.
@@ -53,9 +67,23 @@ teloCtrls.controller('NavBarController', function ($scope, $route, toastr) {
     // Import a local file.
     $scope.importLocal = function() {
         // Ask for confirmation.
-        
-        // Trigger click event on input file element.
-        angular.element('#file_import').trigger('click');
+        var confirmDialog = ngDialog.open({
+            template: 'views/ConfirmDialog.html',
+            className: 'ngdialog-theme-default confirm-dialog',
+            controller: function($scope) {
+                $scope.message = "Are you sure that you want to open a file (all the current information is going to be lost)?";
+                $scope.acceptLabel = "Yes, open a file";
+                $scope.cancelLabel = "No, keep current data";
+                $scope.accept = function() { 
+                    // Close dialog.
+                    confirmDialog.close();
+                    
+                    // Trigger click event on input file element.
+                    angular.element('#file_import').trigger('click');
+                };
+                $scope.cancel = function() { confirmDialog.close(); };
+            }
+        });
     };
     
     // Actions for when a file has been read.
@@ -99,7 +127,7 @@ teloCtrls.controller('SimpleListController', function ($scope, $routeParams, met
 });
 
 // Create controller for simple forms.
-teloCtrls.controller('SimpleFormController', function ($scope, $routeParams, $window, $location, metadataFactory) {
+teloCtrls.controller('SimpleFormController', function ($scope, $routeParams, $window, $location, metadataFactory, ngDialog) {
     // Get row to edit.
     $scope.entry = null;
     if($routeParams.id !== undefined && $routeParams.id !== null && $routeParams.id !== 'new') {
@@ -141,20 +169,27 @@ teloCtrls.controller('SimpleFormController', function ($scope, $routeParams, $wi
     };
     
     // Define behaviour for the delete button.
-    $scope.delete = function(res) {
-        if(res !== false && res !== true) {
-            // Show confirmation dialog.
-            jQuery('#simple_form_modal').foundation('reveal', 'open');
-        } else {
-            // Close confirmation dialog.
-            jQuery('#simple_form_modal').foundation('reveal', 'close');
-
-            // Verify if the entry must be deleted.
-            if(res === true) {
-                taffyDB({id: $scope.entry.id}).remove();
-                $location.path("/list/" + metadataFactory.getPlural($scope.entry.type));
+    $scope.delete = function() {
+        // Ask for confirmation.
+        var mainScope = $scope;
+        var confirmDialog = ngDialog.open({
+            template: 'views/ConfirmDialog.html',
+            className: 'ngdialog-theme-default confirm-dialog',
+            controller: function($scope) {
+                $scope.message = 'Are you sure that you want to delete the ' + mainScope.entry.type + ' "'+mainScope.entry.name+'"?';
+                $scope.acceptLabel = 'Yes, delete "' + mainScope.entry.name + '"';
+                $scope.cancelLabel = "No, keep the " + mainScope.entry.type;
+                $scope.accept = function() { 
+                    // Close dialog.
+                    confirmDialog.close();
+                    
+                    // Delete register and go back to the list.
+                    taffyDB({id: mainScope.entry.id}).remove();
+                    $location.path("/list/" + metadataFactory.getPlural(mainScope.entry.type));
+                };
+                $scope.cancel = function() { confirmDialog.close(); };
             }
-        }
+        });
     };
 });
 
