@@ -35,11 +35,13 @@
     <link rel="stylesheet" href="css/angular/angular-toastr.min.css" />
     <link rel="stylesheet" href="css/angular/ngDialog.min.css" />
     <link rel="stylesheet" href="css/angular/ngDialog-theme-default.min.css" />
+    <link rel="stylesheet" href="css/angular/autocomplete.css" />
     <script type="text/javascript" src="js/angular/angular-1.3.6.min.js"></script>
     <script type="text/javascript" src="js/angular/angular-route.min.js"></script>
     <script type="text/javascript" src="js/angular/angular-animate.min.js"></script>
     <script type="text/javascript" src="js/angular/angular-toastr.min.js"></script>
     <script type="text/javascript" src="js/angular/ngDialog.min.js"></script>
+    <script type="text/javascript" src="js/angular/autocomplete.js"></script>
 
     <!-- TaffyDB -->
     <script type="text/javascript" src="js/others/taffy-min.js"></script>
@@ -106,10 +108,6 @@
 <div ng-view></div>
 
 <!--
-al hacer new y open, pedir confirmacion
-    para ello, utilizar el modulo ngDialog (https://github.com/likeastore/ngDialog)
-    tambien reemplazar el dialog utilizado al querer borrar un registro (tengo que modificar SimpleForm.html para eliminar el div y SimpleFormController para cambiar el codigo)
-
 luego (de agregar calls) verificar que no permite borrar results, users y statuses que esten referenciados en las calls
 
 falta agregar el autocompletar en los settings cuando se elige el nombre

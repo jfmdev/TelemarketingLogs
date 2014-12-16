@@ -13,7 +13,7 @@
         <div class="large-6 large-offset-3 columns"> 
             <label>
                 User name:
-                <input type="text" placeholder="Your name" ng-model="prefs.name" /> 
+                <autocomplete ng-model="prefs.name" data="users" attr-placeholder="Your name"></autocomplete>
             </label> 
         </div> 
     </div> 

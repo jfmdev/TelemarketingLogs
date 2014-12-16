@@ -17,7 +17,7 @@
 */
 
 // Create module for the controllers.
-var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'ngDialog', 'toastr']);
+var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'ngDialog', 'toastr', 'autocomplete']);
 
 // Create controller for projects.
 teloCtrls.controller('ProjectController', function ($scope) {
@@ -206,8 +206,8 @@ teloCtrls.controller('PreferencesController', function ($scope, $routeParams, $l
         name: teloUtil.getUserName()
     };
     
-    // Define autocomplete values for the name field.
-    // TODO: http://ngmodules.org/modules/ngAutocomplete
+    // Get list of users (for the autocomplete input).
+    $scope.users = taffyDB({type: 'user'}).select("name");
     
     // Define action for submit the form.
     $scope.save = function() {
