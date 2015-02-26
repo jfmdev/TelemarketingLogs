@@ -89,7 +89,7 @@
             <li><a href="" ng-click="downloadData()"><span>Save</span></a></li> 
         </ul> 
         <ul class="right"> 
-            <li><a href="index.html#/"><span>Registers</span></a></li> 
+            <li><a href="index.html#/"><span>Projects</span></a></li> 
             <li><a href="#/list/contacts"><span>Contacts</span></a></li> 
             <li class="has-dropdown">
                 <a href="">Settings</a>
@@ -108,11 +108,22 @@
 <div ng-view></div>
 
 <!--
+Vista principal (lista de proyectos)
+    Agregar boton para completar los resultados de las llamadas
+        Alli se mostrarian las llamadas, y los detalles de la activa con botones para completar el resultado o pasar a la siguiente (llamar mas tarde o no volver a llamar)
+
+Edicion de proyectos
+    Mostra la lista de llamadas
+    Agregar botones para agregar una llamada y para agregar varias (se muestra una lista de clientes con los checkbos y los botones select all o select none)
+        Notar que a las llamadas no deberia agregarlas a taffyDB hasta que no se presione save (ya sea que sea un proyecto nuevo o no)
+
 luego (de agregar calls) verificar que no permite borrar results, users y statuses que esten referenciados en las calls
 
-falta agregar el autocompletar en los settings cuando se elige el nombre
+agregar soporte para dropbox y drive (al selecionar 'Open' que pregunta si se va a abrir desde un archivo local o dropbox o drive)
+    al guardar (dependiendo de como se haya abierto) lo guardara automaticamente en el destino elegido
+    en el caso de que sea un archivo nuevo, la primera vez pregunta
 
-agregar soporte para dropbox y drive
+tal vez agregar un boton 'exportar' que pregunta guardarlo como CSV o como Excel
 
 no olvidar agregar una sección de ayuda
 -->

@@ -20,8 +20,69 @@
 var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'ngDialog', 'toastr', 'autocomplete']);
 
 // Create controller for projects.
-teloCtrls.controller('ProjectController', function ($scope) {
+teloCtrls.controller('ProjectController', function ($scope, $routeParams, $window, metadataFactory, ngDialog) {
+    // Get row to edit.
+    $scope.entry = null;
+    if($routeParams.id !== undefined && $routeParams.id !== null && $routeParams.id !== 'new') {
+        // Get object from the database.
+        $scope.entry = taffyDB({id: parseInt($routeParams.id, 10)}).first();
+    }
+    
+    // If no entry has been read from the database, create an empty object.
+    if($scope.entry === undefined || $scope.entry === null || $scope.entry.type !== 'project') {
+        $scope.entry = {};
+        var columns = metadataFactory.getColumns('project');
+        for(var i=0; i<columns.length; i++) {
+            $scope.entry[columns[i]] = null;
+        }
+        $scope.entry.type = 'project';
+    }
+    
+    // Define behaviour for the cancel button.
+    $scope.cancel = function() {
+        $window.history.back();
+    };
+    
+    // Define behaviour for the save button.
+    $scope.save = function() {
+        // Save project and calls.
+        if($scope.entry.id === null || $scope.entry.id === undefined) {
+            // Create project.
+            $scope.entry.id = teloUtil.getNextId();
+            taffyDB.insert($scope.entry);
             
+            // TODO: Enable buttons to add calls.
+        } else {
+            // Update project.
+            taffyDB({id: $scope.entry.id}).update($scope.entry);
+            
+            // TODO: Do something?
+        }
+        
+        // TODO: Show success message
+    };
+    
+    // Define behaviour for the delete button.
+    $scope.delete = function() {
+        // Ask for confirmation.
+        var mainScope = $scope;
+        var confirmDialog = ngDialog.open({
+            template: 'views/ConfirmDialog.html',
+            className: 'ngdialog-theme-default confirm-dialog',
+            controller: function($scope) {
+                $scope.message = 'Are you sure that you want to delete the project "'+mainScope.entry.name+'" along with all his calls?';
+                $scope.acceptLabel = 'Yes, delete "' + mainScope.entry.name + '"';
+                $scope.cancelLabel = "No, keep the project";
+                $scope.accept = function() { 
+                    // Close dialog.
+                    confirmDialog.close();
+                    
+                    // TODO: Delete register and go back to the list.
+                };
+                $scope.cancel = function() { confirmDialog.close(); };
+            }
+        });
+    };
 });
 
 // Create controller for the navigation var.
@@ -105,7 +166,7 @@ teloCtrls.controller('NavBarController', function ($scope, $route, toastr, ngDia
     };
     
     // Add event for read the file selected.
-    document.getElementById('file_import').addEventListener('change', function(evt) { teloUtil.readFile(evt, $scope.fileRead ) }, false);
+    document.getElementById('file_import').addEventListener('change', function(evt) { teloUtil.readFile(evt, $scope.fileRead ); }, false);
 });
 
 // Create controller for simple lists.
