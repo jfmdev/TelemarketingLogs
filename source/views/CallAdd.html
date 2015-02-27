@@ -1,16 +1,46 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
-</html>
+<h3 class="text-center">{{bulk? 'Bulk add' : 'Add call'}}</h3>
+
+<form ng-show="clients.length > 0"> 
+    <div class="row" ng-show="!bulk"> 
+        <div class="large-6 large-offset-3 columns"> 
+            <label>
+                <strong>Client</strong>
+                <select ng-model="client">
+                    <option ng-repeat="client in clients | orderBy: name" value="{{client.id}}">{{client.name}}</option>
+                </select>
+            </label> 
+        </div> 
+    </div> 
+
+    <div class="row" ng-show="bulk"> 
+        <div class="large-6 large-offset-3 columns"> 
+            <label><strong>Clients</strong></label>
+            <label ng-repeat="client in clients | orderBy: name">
+                <input type="checkbox" ng-model="client.selected" /> {{client.name}}
+            </label>
+        </div> 
+    </div> 
+    
+    <div class="row"> 
+        <div class="large-6 large-offset-3 columns"> 
+            <label><strong>Deadline</strong>
+                <quick-datepicker class="right" ng-model='deadline' disable-timepicker="true" placeholder="Click here to select a date"></quick-datepicker>
+            </label> 
+        </div> 
+    </div> 
+    
+    <br/>
+    
+    <div class="row"> 
+        <div class="large-6 large-offset-3 columns"> 
+            <a href="" class="button tiny [radius round] left" ng-click="cancel()">Cancel</a>
+            <a href="" class="button tiny [radius round] right" ng-click="save()">Save</a>
+        </div> 
+    </div> 
+</form>
+
+<div class="row" ng-show="clients.length <= 0"> 
+    <div class="large-6 large-offset-3 columns"> 
+        Before creating calls, you must first load the list of persons that you may call in the <a ng-click="goToContacts()">Contacts</a> section.
+    </div> 
+</div> 

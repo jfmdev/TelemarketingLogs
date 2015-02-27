@@ -16,7 +16,7 @@
                         <img ng-if="datatypes[$index] === 'bool'" src="img/icon/{{row[column]? 'ok.png' : 'delete.png'}}" alt="{{row[column]}}" />
                     </td>
                     <td>
-                        <a ng-href="{{baseEditUrl}}/{{row.id}}" class="button tiny">Edit</a>
+                        <a ng-href="{{baseEditUrl}}/{{row.id}}"><img src="img/icon/pen-checkbox.png" alt="" /> Edit</a>
                     </td>
                 </tr>
             </tbody>

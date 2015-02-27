@@ -17,7 +17,7 @@
 */
 
 // Create module for the controllers.
-var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'ngDialog', 'toastr', 'autocomplete']);
+var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'ngDialog', 'toastr', 'autocomplete', 'ngQuickDate']);
 
 // Create controller for projects.
 teloCtrls.controller('ProjectController', function ($scope, $routeParams, $window, metadataFactory, ngDialog) {
@@ -42,18 +42,48 @@ teloCtrls.controller('ProjectController', function ($scope, $routeParams, $windo
         $scope.calls = [];
     }
 
+    // TODO: usar lo de forms para validar que el nombre no este en blanco, y usar esa propierdad de dirty (o algo asi) para habilitar o desbailidat los botones de save y mostrar la warning con cancel
+
     // TODO: DELETE THIS
     $scope.calls.push({id: 1, contact: "Pepe", deadline: moment().format("l"), status: "Ok"});
     $scope.calls.push({id: 1, contact: "Pepe", deadline: moment().format("l"), status: "Ok"});
     
     // Define behaviour for the 'add call' button.
-    $scope.addCall = function() {
-        // TODO: Show call form in a dialog.
-    };
-    
-    // Define behaviour for the 'bulk add' button.
-    $scope.bulkAddCalls = function() {
-        // TODO: Show bulk form in a dialog.
+    $scope.addCall = function(bulk) {
+        // Show call form in a dialog.
+        var callDialog = ngDialog.open({
+            template: 'views/CallAdd.html',
+            className: 'ngdialog-theme-default confirm-dialog',
+            controller: function($scope, $location) {
+                // TODO: Get list of clients. If they are not clients available, indicate to the user to first add ones.
+                $scope.clients = [{id:1, name:"Pepe", selected:false}, {id:2, name:"Pochola", selected:false}];
+$scope.clients = [];                
+                $scope.deadline = new Date();
+                $scope.bulk = bulk;
+                if(!bulk) $scope.client = $scope.clients.length > 0? $scope.clients[0].id : "";
+                
+                $scope.save = function() {
+                    // TODO: Insert call(s) in the database.
+                    if(!bulk) {
+                        alert($scope.client);
+                    } else {
+                        alert($scope.clients[0].selected + " - " + $scope.clients[1].selected);
+                    }
+                    
+                    // Close dialog.
+                    callDialog.close();
+                };
+                $scope.cancel = function() {
+                    // Close dialog.
+                    callDialog.close();
+                };
+                $scope.goToContacts = function() {
+                    // Close the dialog and redirect to the contacts section.
+                    $location.path('/list/contacts');
+                    callDialog.close();
+                };
+            }
+        });
     };
     
     // Define behaviour for the edit button for calls.
