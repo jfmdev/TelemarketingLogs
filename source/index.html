@@ -46,6 +46,9 @@
     <!-- TaffyDB -->
     <script type="text/javascript" src="js/others/taffy-min.js"></script>
 
+    <!-- MomentJS -->
+    <script type="text/javascript" src="js/others/moment.js"></script>
+
     <!-- Local storage -->
     <script type="text/javascript" src="js/storage/json2.js"></script>
     <script type="text/javascript" src="js/storage/amplify.store.min.js"></script>
@@ -111,6 +114,17 @@
 Vista principal (lista de proyectos)
     Agregar boton para completar los resultados de las llamadas
         Alli se mostrarian las llamadas, y los detalles de la activa con botones para completar el resultado o pasar a la siguiente (llamar mas tarde o no volver a llamar)
+            llamar mas tarde crea otra call para el mismo proyecto
+            no volver a llamar cambiar el estado del contacto
+Calls
+    id
+    contacto <- lo de no volver a llamar va aca
+    resultado
+    estado
+    fecha llamada hecha
+    fecha de plazo
+    commentario
+    {id: 1, contact_id:1, result_id:1, status_id:1, deadline: new Date(), call_date:new Date(), comments:""}
 
 Edicion de proyectos
     Mostra la lista de llamadas

@@ -36,7 +36,7 @@ teloApp.config(['$routeProvider', function($routeProvider) {
         })
         .when('/project/:id?', {
             controller: 'ProjectController',
-            templateUrl: 'views/Project.html'
+            templateUrl: 'views/ProjectEdit.html'
         })
         .when('/preferences/:flag?', {
             controller: 'PreferencesController',

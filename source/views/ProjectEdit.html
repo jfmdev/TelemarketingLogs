@@ -1,0 +1,67 @@
+<h2 class="text-center">Project</h2>
+
+<div class="large-6 large-offset-3 columns">
+    <div class="row">
+        <label>Name
+            <input type="text" ng-model="entry.name" />
+        </label>
+    </div>
+    <div class="row">
+        <div class="large-7 columns">
+            <h3>Calls</h3>
+        </div>
+        <div class="large-5 columns text-right">
+            <a ng-click="addCall()" href="" class="button secondary tiny radius">Add call</a>
+            <a ng-click="bulkAddCalls()" href="" class="button secondary tiny radius">Bulk add</a>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div ng-show="calls.length > 0">
+            <table>
+                 <thead>
+                    <tr>
+                       <th>Contact</th>
+                       <th>Deadline</th>
+                       <th>Status</th>
+                       <th></th>
+                       <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="call in calls | orderBy: predicate">
+                        <td>{{call.contact}}</td>
+                        <td>{{call.deadline}}</td>
+                        <td>{{call.status}}</td>
+                        <td>
+                            <a ng-click="editCall(call.id)"><img src="img/icon/pen-checkbox.png" alt="" /> Edit</a>
+                        </td>
+                        <td>
+                            <a ng-click="deleteCall(call.id)"><img src="img/icon/delete.png" alt="" /> Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+        </div>
+        
+        <div class="large-6 large-offset-3 text-center alert-box secondary radius" ng-show="calls.length <= 0">
+            No calls have been assigned to this project
+        </div>
+        
+    </div>
+</div>
+
+<div class="row">
+    <div class="large-6 large-offset-3 columns">
+        <div class="medium-4 columns text-center">
+            <a ng-click="cancel()" href="" class="button info tiny">Go back</a>
+        </div>
+        <div class="medium-4 columns text-center">
+            <a ng-click="delete()" ng-show="entry.id !== null" href="" class="button alert tiny">Delete</a>
+        </div>
+        <div class="medium-4 columns text-center">
+            <a ng-click="save()" href="" class="button success tiny">Save</a>
+        </div>
+    </div>
+</div>

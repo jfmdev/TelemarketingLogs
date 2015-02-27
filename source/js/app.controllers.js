@@ -21,11 +21,14 @@ var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'ngDialog', 'toastr', 
 
 // Create controller for projects.
 teloCtrls.controller('ProjectController', function ($scope, $routeParams, $window, metadataFactory, ngDialog) {
-    // Get row to edit.
+    // Get project to edit.
     $scope.entry = null;
     if($routeParams.id !== undefined && $routeParams.id !== null && $routeParams.id !== 'new') {
         // Get object from the database.
         $scope.entry = taffyDB({id: parseInt($routeParams.id, 10)}).first();
+        
+        // TODO: Get rows
+        $scope.calls = [];
     }
     
     // If no entry has been read from the database, create an empty object.
@@ -36,10 +39,38 @@ teloCtrls.controller('ProjectController', function ($scope, $routeParams, $windo
             $scope.entry[columns[i]] = null;
         }
         $scope.entry.type = 'project';
+        $scope.calls = [];
     }
+
+    // TODO: DELETE THIS
+    $scope.calls.push({id: 1, contact: "Pepe", deadline: moment().format("l"), status: "Ok"});
+    $scope.calls.push({id: 1, contact: "Pepe", deadline: moment().format("l"), status: "Ok"});
+    
+    // Define behaviour for the 'add call' button.
+    $scope.addCall = function() {
+        // TODO: Show call form in a dialog.
+    };
+    
+    // Define behaviour for the 'bulk add' button.
+    $scope.bulkAddCalls = function() {
+        // TODO: Show bulk form in a dialog.
+    };
+    
+    // Define behaviour for the edit button for calls.
+    $scope.editCall = function() {
+        // TODO: Show call form in a dialog.
+    };
+    
+    // Define behaviour for the delete button for calls.
+    $scope.deleteCall = function() {
+        // TODO: Ask confirmation before delete.
+    };
     
     // Define behaviour for the cancel button.
     $scope.cancel = function() {
+        // TODO: Ask for confirmation if the user modified something.
+        
+        // Go back.
         $window.history.back();
     };
     
