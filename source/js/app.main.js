@@ -80,7 +80,7 @@ teloApp.factory('metadataFactory', function() {
             plural: 'statuses'
         },
         contact  : {
-            fields: ['id', 'name', 'telephone', 'cellphone', 'availability', 'active'],
+            fields: ['id', 'name', 'telephone', 'cellphone', 'availability', 'disable'],
             types: ['number', 'text', 'text', 'text', 'textarea', 'bool'],
             plural: 'contacts'
         },
@@ -152,10 +152,4 @@ teloApp.factory('metadataFactory', function() {
     };
     
     return factory;
-});
-
-// Function executed after the page has been loaded.
-angular.element(document).ready(function () {
-    // Load default data into the database.
-    teloUtil.cleanDB();
 });

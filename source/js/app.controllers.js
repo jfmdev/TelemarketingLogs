@@ -20,15 +20,15 @@
 var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'ngDialog', 'toastr', 'autocomplete', 'ngQuickDate']);
 
 // Create controller for projects.
-teloCtrls.controller('ProjectController', function ($scope, $routeParams, $window, metadataFactory, ngDialog) {
+teloCtrls.controller('ProjectController', function ($scope, $routeParams, $window, $location, metadataFactory, ngDialog, toastr) {
     // Get project to edit.
     $scope.entry = null;
     if($routeParams.id !== undefined && $routeParams.id !== null && $routeParams.id !== 'new') {
         // Get object from the database.
         $scope.entry = taffyDB({id: parseInt($routeParams.id, 10)}).first();
         
-        // TODO: Get rows
-        $scope.calls = [];
+        // Get call rows
+        $scope.calls = taffyDB({type: 'call', projectId: $scope.entry.id}).get();
     }
     
     // If no entry has been read from the database, create an empty object.
@@ -42,33 +42,41 @@ teloCtrls.controller('ProjectController', function ($scope, $routeParams, $windo
         $scope.calls = [];
     }
 
-    // TODO: usar lo de forms para validar que el nombre no este en blanco, y usar esa propierdad de dirty (o algo asi) para habilitar o desbailidat los botones de save y mostrar la warning con cancel
-
-    // TODO: DELETE THIS
-    $scope.calls.push({id: 1, contact: "Pepe", deadline: moment().format("l"), status: "Ok"});
-    $scope.calls.push({id: 1, contact: "Pepe", deadline: moment().format("l"), status: "Ok"});
-    
     // Define behaviour for the 'add call' button.
+    var parentScope = $scope;
     $scope.addCall = function(bulk) {
         // Show call form in a dialog.
         var callDialog = ngDialog.open({
             template: 'views/CallAdd.html',
             className: 'ngdialog-theme-default confirm-dialog',
             controller: function($scope, $location) {
-                // TODO: Get list of clients. If they are not clients available, indicate to the user to first add ones.
-                $scope.clients = [{id:1, name:"Pepe", selected:false}, {id:2, name:"Pochola", selected:false}];
-$scope.clients = [];                
+                // Get list of clients.
+                $scope.clients = taffyDB({type: 'contact'}).get();
                 $scope.deadline = new Date();
                 $scope.bulk = bulk;
                 if(!bulk) $scope.client = $scope.clients.length > 0? $scope.clients[0].id : "";
                 
-                $scope.save = function() {
-                    // TODO: Insert call(s) in the database.
+                // Add the 'selected' property to the clients.
+                if($scope.clients !== null && $scope.clients.length !== undefined) {
+                    for(var i=0; i<$scope.clients.length; i++) $scope.clients[i].selected = false;
+                }
+                
+                $scope.save = function() { 
+                    // Add call(s) to the project (do not yet add them to the database).
                     if(!bulk) {
-                        alert($scope.client);
+                        // Add call.
+                        parentScope.calls.push({type: 'call', id: teloUtil.getNextId(), projectId: null, contactId: $scope.client, deadline: $scope.deadline, statusId: teloUtil.getFirstStatusId()});
                     } else {
-                        alert($scope.clients[0].selected + " - " + $scope.clients[1].selected);
+                        // Add a call for each selected contact.
+                        for(var i=0; i<$scope.clients.length; i++) {
+                            if($scope.clients[i].selected) {
+                                parentScope.calls.push({type: 'call', id: teloUtil.getNextId(), projectId:null, contactId: $scope.clients[i].id, deadline: $scope.deadline, statusId: teloUtil.getFirstStatusId()});
+                            }
+                        }
                     }
+                    
+                    // Update calls list.
+                    parentScope.updatePrettyCalls();
                     
                     // Close dialog.
                     callDialog.close();
@@ -87,40 +95,79 @@ $scope.clients = [];
     };
     
     // Define behaviour for the edit button for calls.
-    $scope.editCall = function() {
+    $scope.editCall = function(id) {
         // TODO: Show call form in a dialog.
+console.log('editCall: ' + id); // TODO: BORRAR        
     };
     
     // Define behaviour for the delete button for calls.
-    $scope.deleteCall = function() {
-        // TODO: Ask confirmation before delete.
+    $scope.deleteCall = function(id) {
+        if(id !== undefined && id !== null) {
+            // Ask confirmation before delete.
+            var parentScope = $scope;
+            var confirmDialog = ngDialog.open({
+                template: 'views/ConfirmDialog.html',
+                className: 'ngdialog-theme-default confirm-dialog',
+                controller: function($scope) {
+                    $scope.message = "Are you sure that you want to delete this call (this operation is irreversible)?";
+                    $scope.acceptLabel = "Yes, delete the call";
+                    $scope.cancelLabel = "No, keep the call";
+                    $scope.accept = function() { 
+                        // Remove call.
+                        var oldList = parentScope.calls;                 
+                        parentScope.calls = [];
+                        for(var i=0; i<oldList.length; i++) {
+                            if(oldList[i].id !== id) {
+                                parentScope.calls.push(oldList[i]);
+                            }
+                        }
+                        parentScope.updatePrettyCalls();
+
+                        // Close dialog.
+                        confirmDialog.close(); 
+                    };
+                    $scope.cancel = function() { confirmDialog.close(); };
+                }
+            });            
+        }
     };
     
     // Define behaviour for the cancel button.
     $scope.cancel = function() {
-        // TODO: Ask for confirmation if the user modified something.
-        
         // Go back.
         $window.history.back();
     };
     
     // Define behaviour for the save button.
     $scope.save = function() {
+        // Verify that the project's name is not empty.
+        if($scope.entry.name === null || $scope.entry.name === '') {
+            toastr.error('The project name cannot be empty', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
+            return;
+        }
+        
         // Save project and calls.
         if($scope.entry.id === null || $scope.entry.id === undefined) {
             // Create project.
             $scope.entry.id = teloUtil.getNextId();
             taffyDB.insert($scope.entry);
-            
-            // TODO: Enable buttons to add calls.
         } else {
             // Update project.
             taffyDB({id: $scope.entry.id}).update($scope.entry);
-            
-            // TODO: Do something?
         }
         
-        // TODO: Show success message
+        // Save calls.
+        try {
+            taffyDB({type: 'call', projectId: $scope.entry.id}).remove();
+        }catch(err) { console.log(err); }
+        for(var i=0; i<$scope.calls.length; i++) {
+            $scope.calls[i].projectId = $scope.entry.id;
+            if($scope.calls[i].id === undefined || $scope.calls[i].id === null) $scope.calls[i].id = teloUtil.getNextId();
+            taffyDB.insert($scope.calls[i]);
+        }
+        
+        // Show success message
+        toastr.success('The project has been saved', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
     };
     
     // Define behaviour for the delete button.
@@ -138,17 +185,51 @@ $scope.clients = [];
                     // Close dialog.
                     confirmDialog.close();
                     
-                    // TODO: Delete register and go back to the list.
+                    // Delete registers and go back to the project list.
+                    taffyDB({type: 'project', id: mainScope.entry.id}).remove();
+                    taffyDB({type: 'call', projectId: mainScope.entry.id}).remove();
+                    $location.path('/');
                 };
                 $scope.cancel = function() { confirmDialog.close(); };
             }
         });
     };
+    
+    /**
+     * Generates an user friendly list of call from the list saved in the database.
+     */
+    $scope.updatePrettyCalls = function() {
+        $scope.prettyCalls = [];
+        if($scope.calls !== null) {
+            for(var i=0; i<$scope.calls.length; i++) {
+                var call = $scope.calls[i];
+                var client = taffyDB({type: 'contact', id: call.contactId}).first();
+                var status = taffyDB({type: 'status', id: call.statusId}).first();          
+                $scope.prettyCalls.push({
+                    id: call.id,
+                    contact: client.name,
+                    status: status.name,
+                    deadline: (call.deadline !== null? moment(call.deadline.getTime()).format("l") : null)
+                });
+            }
+        }        
+    };
+    $scope.updatePrettyCalls();
 });
 
 // Create controller for the navigation var.
-teloCtrls.controller('NavBarController', function ($scope, $route, toastr, ngDialog) {
+teloCtrls.controller('NavBarController', function ($scope, $http, $location, toastr, ngDialog) {
     $scope.file = "Untitled";
+    
+    // Initialization function.
+    $scope.init = function() {
+        // Load sample data.
+        $http.get('sample.json').success(function(response) {
+            teloUtil.fillDatabaseWithJson( response );
+            $scope.file = "Sample";
+            if(!$scope.$$phase) $scope.$apply();
+        });
+    };
     
     // Clean the database.
     $scope.clean = function() {
@@ -171,8 +252,8 @@ teloCtrls.controller('NavBarController', function ($scope, $route, toastr, ngDia
                     // Show message.
                     toastr.success('The database has been cleaned', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
 
-                    // Reload the view.
-                    $route.reload();
+                    // Go to main view.
+                    $location.path('/');
                 };
                 $scope.cancel = function() { confirmDialog.close(); };
             }
@@ -218,8 +299,8 @@ teloCtrls.controller('NavBarController', function ($scope, $route, toastr, ngDia
             // Show toast message.
             toastr.success('The file has been opened', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
             
-            // Reload view.
-            $route.reload();
+            // Go to main view.
+            $location.path('/');
         } else {
             // Show an error message.
             toastr.error('The file could not be opened', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});

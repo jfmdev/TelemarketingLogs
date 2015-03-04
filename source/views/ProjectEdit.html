@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="call in calls | orderBy: predicate">
+                    <tr ng-repeat="call in prettyCalls | orderBy: contact">
                         <td>{{call.contact}}</td>
                         <td>{{call.deadline}}</td>
                         <td>{{call.status}}</td>

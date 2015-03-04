@@ -67,7 +67,7 @@
 </head>
 <body>
 
-<nav class="top-bar" data-topbar="" role="navigation" ng-controller="NavBarController"> 
+<nav class="top-bar" data-topbar="" role="navigation" ng-controller="NavBarController" ng-init="init()"> 
     <ul class="title-area"> 
         <li class="name"> 
             <h1>Telemarketing Logs</h1> 
@@ -129,9 +129,8 @@ Calls
     {id: 1, contact_id:1, result_id:1, status_id:1, deadline: new Date(), call_date:new Date(), comments:""}
 
 Edicion de proyectos
-    Mostra la lista de llamadas
-    Agregar botones para agregar una llamada y para agregar varias (se muestra una lista de clientes con los checkbos y los botones select all o select none)
-        Notar que a las llamadas no deberia agregarlas a taffyDB hasta que no se presione save (ya sea que sea un proyecto nuevo o no)
+    Bulk add -> agregar los botones marcar todo y desmarcar todo
+    Implementar boton para editar una sola llamada
 
 luego (de agregar calls) verificar que no permite borrar results, users y statuses que esten referenciados en las calls
 
