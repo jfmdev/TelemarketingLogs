@@ -219,3 +219,21 @@ teloUtil.readFile = function(evt, callback) {
         if(callback !== undefined && callback !== null) callback(false, null);
     }
 };
+
+/**
+ * Creates an empty call.
+ * 
+ * @returns {object} An empty call.
+ */
+teloUtil.createEmptyCall = function() {
+    return {
+        type: 'call',
+        id: null, 
+        projectId: null, 
+        contactId: null, 
+        statusId: teloUtil.getFirstStatusId(),
+        deadline: null, 
+        called: null,
+        comment: null
+    };
+};

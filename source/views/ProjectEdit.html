@@ -3,7 +3,7 @@
 <div class="large-6 large-offset-3 columns">
     <div class="row">
         <label>Name
-            <input type="text" ng-model="entry.name" />
+            <input type="text" ng-model="entry.name" ng-keyup="projectNameModified()" />
         </label>
     </div>
     <div class="row">
@@ -34,10 +34,10 @@
                         <td>{{call.deadline}}</td>
                         <td>{{call.status}}</td>
                         <td>
-                            <a ng-click="editCall(call.id)"><img src="img/icon/pen-checkbox.png" alt="" /> Edit</a>
+                            <a ng-click="editCall(call.data)"><img src="img/icon/pen-checkbox.png" alt="" /> Edit</a>
                         </td>
                         <td>
-                            <a ng-click="deleteCall(call.id)"><img src="img/icon/delete.png" alt="" /> Delete</a>
+                            <a ng-click="deleteCall(call.data.id)"><img src="img/icon/delete.png" alt="" /> Delete</a>
                         </td>
                     </tr>
                 </tbody>
@@ -61,7 +61,7 @@
             <a ng-click="delete()" ng-show="entry.id !== null" href="" class="button alert tiny">Delete</a>
         </div>
         <div class="medium-4 columns text-center">
-            <a ng-click="save()" href="" class="button success tiny">Save</a>
+            <a ng-click="!changesMade || save()" href="" class="button success tiny" ng-disabled="!changesMade">Save</a>
         </div>
     </div>
 </div>

@@ -4,17 +4,19 @@
     <div class="row" ng-show="!bulk"> 
         <div class="large-6 large-offset-3 columns"> 
             <label>
-                <strong>Client</strong>
-                <select ng-model="client">
-                    <option ng-repeat="client in clients | orderBy: name" value="{{client.id}}">{{client.name}}</option>
-                </select>
-            </label> 
+                <strong>Contact</strong>
+                <select ng-model="client" ng-options="contact.id as contact.name for contact in clients"></select>
+            </label>
         </div> 
     </div> 
 
     <div class="row" ng-show="bulk"> 
         <div class="large-6 large-offset-3 columns"> 
             <label><strong>Clients</strong></label>
+            <label style="float:right;">
+                <a ng-click="selectAll(true)">Select all</a><br/>
+                <a ng-click="selectAll(false)">Select none</a>
+            </label>
             <label ng-repeat="client in clients | orderBy: name">
                 <input type="checkbox" ng-model="client.selected" /> {{client.name}}
             </label>

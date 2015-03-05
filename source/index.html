@@ -63,6 +63,7 @@
     <link rel="stylesheet" href="css/app.css" />
     <script type="text/javascript" src="js/app.utils.js"></script>
     <script type="text/javascript" src="js/app.controllers.js"></script>
+    <script type="text/javascript" src="js/app.controller.project.js"></script>
     <script type="text/javascript" src="js/app.main.js"></script>
 </head>
 <body>
@@ -118,19 +119,12 @@ Vista principal (lista de proyectos)
         Alli se mostrarian las llamadas, y los detalles de la activa con botones para completar el resultado o pasar a la siguiente (llamar mas tarde o no volver a llamar)
             llamar mas tarde crea otra call para el mismo proyecto
             no volver a llamar cambiar el estado del contacto
-Calls
-    id
-    contacto <- lo de no volver a llamar va aca
-    resultado
-    estado
-    fecha llamada hecha
-    fecha de plazo
-    commentario
-    {id: 1, contact_id:1, result_id:1, status_id:1, deadline: new Date(), call_date:new Date(), comments:""}
 
 Edicion de proyectos
+    Agregar un flag para controlar si se modifico algo, deshabilitar el boton de save si no se cambio nada y mostrar la confirmacion en go back
     Bulk add -> agregar los botones marcar todo y desmarcar todo
-    Implementar boton para editar una sola llamada
+        hay un problema con las llamadas: a veces no se borrar, a veces permenen sin borrarse aunque presion el boton 'go back'
+            CREO QUE YA TENGO LA SOLUCION, VER LA LINEA 29 DE APP.CONTROLLER.PROJECT
 
 luego (de agregar calls) verificar que no permite borrar results, users y statuses que esten referenciados en las calls
 
