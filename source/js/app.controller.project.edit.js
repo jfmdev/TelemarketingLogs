@@ -17,12 +17,12 @@
 */
 
 // Create controller for projects.
-teloCtrls.controller('ProjectController', function ($scope, $routeParams, $window, $location, metadataFactory, ngDialog, toastr) {
+teloCtrls.controller('ProjectEditController', function ($scope, $routeParams, $window, $location, metadataFactory, ngDialog, toastr) {
     // Get project to edit.
     $scope.entry = null;
     if($routeParams.id !== undefined && $routeParams.id !== null && $routeParams.id !== 'new') {
-        // Get object from the database.
-        $scope.entry = taffyDB({id: parseInt($routeParams.id, 10)}).first();
+        // Get object from the database (clone it in order to avoid unintentioned modifications).
+        $scope.entry =  JSON.parse(JSON.stringify( taffyDB({id: parseInt($routeParams.id, 10)}).first() ));
         
         // Get call rows (clone the array in order to avoid bugs when doing a push over the array).
         var callsAux = taffyDB({type: 'call', projectId: $scope.entry.id}).get();
@@ -227,6 +227,9 @@ teloCtrls.controller('ProjectController', function ($scope, $routeParams, $windo
             taffyDB.insert($scope.calls[i]);
         }
         
+        // Update flag.
+        $scope.changesMade = false;
+
         // Show success message
         toastr.success('The project has been saved', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
     };

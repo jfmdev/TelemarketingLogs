@@ -63,7 +63,8 @@
     <link rel="stylesheet" href="css/app.css" />
     <script type="text/javascript" src="js/app.utils.js"></script>
     <script type="text/javascript" src="js/app.controllers.js"></script>
-    <script type="text/javascript" src="js/app.controller.project.js"></script>
+    <script type="text/javascript" src="js/app.controller.project.edit.js"></script>
+    <script type="text/javascript" src="js/app.controller.project.view.js"></script>
     <script type="text/javascript" src="js/app.main.js"></script>
 </head>
 <body>
@@ -120,13 +121,17 @@ Vista principal (lista de proyectos)
             llamar mas tarde crea otra call para el mismo proyecto
             no volver a llamar cambiar el estado del contacto
 
-Edicion de proyectos
-    Agregar un flag para controlar si se modifico algo, deshabilitar el boton de save si no se cambio nada y mostrar la confirmacion en go back
-    Bulk add -> agregar los botones marcar todo y desmarcar todo
-        hay un problema con las llamadas: a veces no se borrar, a veces permenen sin borrarse aunque presion el boton 'go back'
-            CREO QUE YA TENGO LA SOLUCION, VER LA LINEA 29 DE APP.CONTROLLER.PROJECT
+Add controller and view for work over a project.
+Fix bug in project edition, in which the project's name was always being saved.
+Fix bug in project edition, in which confirmation for go back was being asked even after saving the project.
 
-luego (de agregar calls) verificar que no permite borrar results, users y statuses que esten referenciados en las calls
+Rehacer archivo de sample, para que las calls tengan todos los campos necesarios
+
+Implementar controles para no borrar results, statuses y users si estan referenciados por una call.
+
+Que en la barra de navegación, indique el nombre de usuario (al hacer click, que vaya a la parte de prefencias).
+    Tal vez poner New, Open y Save como subtelemento de Files
+    Poner mas claro cual es el nombre del documento que se esta editando
 
 agregar soporte para dropbox y drive (al selecionar 'Open' que pregunta si se va a abrir desde un archivo local o dropbox o drive)
     al guardar (dependiendo de como se haya abierto) lo guardara automaticamente en el destino elegido

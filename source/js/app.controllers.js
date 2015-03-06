@@ -20,7 +20,7 @@
 var teloCtrls = angular.module('teloCtrls', ['ngAnimate', 'ngDialog', 'toastr', 'autocomplete', 'ngQuickDate']);
 
 // Create controller for the navigation var.
-teloCtrls.controller('NavBarController', function ($scope, $http, $location, toastr, ngDialog) {
+teloCtrls.controller('NavBarController', function ($scope, $http, $location, $route, toastr, ngDialog) {
     $scope.file = "Untitled";
     
     // Initialization function.
@@ -54,8 +54,8 @@ teloCtrls.controller('NavBarController', function ($scope, $http, $location, toa
                     // Show message.
                     toastr.success('The database has been cleaned', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
 
-                    // Go to main view.
-                    $location.path('/');
+                    // Reload current view.
+                    $route.reload();
                 };
                 $scope.cancel = function() { confirmDialog.close(); };
             }
@@ -101,8 +101,8 @@ teloCtrls.controller('NavBarController', function ($scope, $http, $location, toa
             // Show toast message.
             toastr.success('The file has been opened', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});
             
-            // Go to main view.
-            $location.path('/');
+            // Reload current view.
+            $route.reload();
         } else {
             // Show an error message.
             toastr.error('The file could not be opened', '', {closeButton: true, timeOut:2000, positionClass: 'toast-bottom-right'});

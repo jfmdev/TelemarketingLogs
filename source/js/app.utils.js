@@ -86,6 +86,21 @@ teloUtil.getUserName = function() {
 };
 
 /**
+ * Get the user's id, of the current user.
+ * 
+ * @returns {integer} The user's id.
+ */
+teloUtil.getUserId = function() {
+    var id = null;
+    var res = taffyDB({type:"user", name: teloUtil.getUserName()});
+    if(res.count() > 0) {
+        id = res.first().id;
+    }
+console.log("ID: " + id);
+    return id;
+};
+
+/**
  * Verify if the user has defined his name.
  * 
  * @returns {Boolean} 'true' is the user's name is defined, 'false' otherwise.
@@ -234,6 +249,8 @@ teloUtil.createEmptyCall = function() {
         statusId: teloUtil.getFirstStatusId(),
         deadline: null, 
         called: null,
-        comment: null
+        comment: null,
+        userIdCreation: teloUtil.getUserId(),
+        userIdLastUpdate: null
     };
 };
