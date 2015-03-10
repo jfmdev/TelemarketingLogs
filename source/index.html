@@ -68,62 +68,50 @@
     <script type="text/javascript" src="js/app.main.js"></script>
 </head>
 <body>
-
-<nav class="top-bar" data-topbar="" role="navigation" ng-controller="NavBarController" ng-init="init()"> 
-    <ul class="title-area"> 
-        <li class="name"> 
-            <h1>Telemarketing Logs</h1> 
-        </li> 
-    </ul> 
-    <section class="top-bar-section">
-        <ul class="left"> 
-            <li><a class="project" href="index.html#/"><span>{{file}}</span></a></li> 
-            <li><a href="" ng-click="clean()"><span>New</span></a></li> 
-            <li>
-                <a href="" ng-click="importLocal()"><span>Open</span></a>
-                <input type="file" id="file_import" class="hide" />
+    <nav class="top-bar" data-topbar="" role="navigation" ng-controller="NavBarController" ng-init="init()"> 
+        <ul class="title-area"> 
+            <li class="name"> 
+                <h1>Telemarketing Logs</h1> 
             </li> 
-            <!--
-            <li class="has-dropdown">
-                <a href="#/">Open</a>
-                <ul class="dropdown">
-                    <li><a href="#/open/local"><span>Local file</span></a></li> 
-                    <li><a href="#/open/dropbox"><span>Dropbox</span></a></li> 
-                    <li><a href="#/open/drive"><span>Google Drive</span></a></li> 
-                </ul>
-            </li>
-            -->
-            <li><a href="" ng-click="downloadData()"><span>Save</span></a></li> 
         </ul> 
-        <ul class="right"> 
-            <li><a href="index.html#/"><span>Projects</span></a></li> 
-            <li><a href="#/list/contacts"><span>Contacts</span></a></li> 
-            <li class="has-dropdown">
-                <a href="">Settings</a>
-                <ul class="dropdown">
-                    <li><a href="#/list/users"><span>Users</span></a></li> 
-                    <li><a href="#/list/statuses"><span>Statuses</span></a></li> 
-                    <li><a href="#/list/results"><span>Results</span></a></li> 
-                    <li><a href="#/preferences"><span>Preferences</span></a></li> 
-                </ul>
-            </li>         
-        </ul>
-    </section> 
-</nav>    
+        <section class="top-bar-section">
+            <ul class="left"> 
+                <li><a class="project" href="index.html#/"><span>{{file}}</span></a></li> 
+                <li><a href="" ng-click="clean()"><span>New</span></a></li> 
+                <li>
+                    <a href="" ng-click="importLocal()"><span>Open</span></a>
+                    <input type="file" id="file_import" class="hide" />
+                </li> 
+                <!--
+                <li class="has-dropdown">
+                    <a href="#/">Open</a>
+                    <ul class="dropdown">
+                        <li><a href="#/open/local"><span>Local file</span></a></li> 
+                        <li><a href="#/open/dropbox"><span>Dropbox</span></a></li> 
+                        <li><a href="#/open/drive"><span>Google Drive</span></a></li> 
+                    </ul>
+                </li>
+                -->
+                <li><a href="" ng-click="downloadData()"><span>Save</span></a></li> 
+            </ul> 
+            <ul class="right"> 
+                <li><a href="index.html#/"><span>Projects</span></a></li> 
+                <li><a href="#/list/contacts"><span>Contacts</span></a></li> 
+                <li class="has-dropdown">
+                    <a href="">Settings</a>
+                    <ul class="dropdown">
+                        <li><a href="#/list/users"><span>Users</span></a></li> 
+                        <li><a href="#/list/statuses"><span>Statuses</span></a></li> 
+                        <li><a href="#/list/results"><span>Results</span></a></li> 
+                        <li><a href="#/preferences"><span>Preferences</span></a></li> 
+                    </ul>
+                </li>         
+            </ul>
+        </section> 
+    </nav>
 
-    
-<div ng-view></div>
+    <div ng-view></div>
 
-<!--
-Rehacer archivo de sample, para que las calls tengan todos los campos necesarios
-
-Implementar controles para no borrar results, statuses y users si estan referenciados por una call.
-
-agregar una sección de ayuda
-	
-escribir el readme.md
-
--->
     <script type="text/javascript">
         //= require foundation
         $(document).foundation();

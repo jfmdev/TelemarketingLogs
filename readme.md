@@ -1,14 +1,22 @@
 TelemarketingLogs
 =================
 
-**TelemarketingLogs** is a simple telemarketing application...
+_A simple way to track your calls_
+
+**TelemarketingLogs** is a simple telemarketing application, that allows to keep track of the calls that you made to your clients or contacts.
+
+It has been developed as a HTML5 app, using AngularJS and Foundation.
 
 [Live demo](http://jfmdev.github.io/TelemarketingLogs/ "TelemarketingLogs - Live demo")
 
 Features
 --------
 
-
+ * Works offline.
+ * Export/Import your projects to JSON.
+ * Let you organize your calls in projects.
+ * Let you manage your list of contacts.
+ * User guide inside the application.
 
 License
 -------
