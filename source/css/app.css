@@ -73,6 +73,41 @@ table tbody tr td > a.button.tiny {
     margin: 0;
 }
 
+table.calls tbody tr:hover {
+    cursor: pointer;
+    background-color: #dfd;
+}
+
+table.calls tbody tr.selected,
+table.calls tbody tr.selected:hover {
+    cursor: auto;
+    background-color: #ddf;
+}
+
+/* ----- Project's view ----- */
+
+div.panel.call {
+    margin: 0.25em;
+    padding: 0.25em;
+}
+
+div.panel.call div.details,
+div.panel.call div.details label {
+    font-family: Verdana;
+    font-size: 10pt;
+}
+
+div.panel.call div.details a.button.small {
+    padding: 0.3rem;
+    margin-bottom: 0px;
+}
+
+div.panel.call div.details select {
+    width: auto;
+    padding: 0;
+    height: auto;
+}
+
 /* ----- Misc ----- */
 
 a.button.no-margin {

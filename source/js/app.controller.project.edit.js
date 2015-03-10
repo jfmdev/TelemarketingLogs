@@ -267,12 +267,12 @@ teloCtrls.controller('ProjectEditController', function ($scope, $routeParams, $w
         if($scope.calls !== null) {
             for(var i=0; i<$scope.calls.length; i++) {
                 var call = $scope.calls[i];
-                var client = taffyDB({type: 'contact', id: call.contactId}).first();
+                var contact = taffyDB({type: 'contact', id: call.contactId}).first();
                 var status = taffyDB({type: 'status', id: call.statusId}).first();          
           
                 $scope.prettyCalls.push({
                     data: call,
-                    contact: client.name,
+                    contact: contact.name,
                     status: status.name,
                     deadline: (call.deadline !== null? moment(call.deadline.getTime()).format("l") : null)
                 });

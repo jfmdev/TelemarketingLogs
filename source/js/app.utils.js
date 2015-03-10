@@ -96,7 +96,6 @@ teloUtil.getUserId = function() {
     if(res.count() > 0) {
         id = res.first().id;
     }
-console.log("ID: " + id);
     return id;
 };
 
@@ -247,10 +246,11 @@ teloUtil.createEmptyCall = function() {
         projectId: null, 
         contactId: null, 
         statusId: teloUtil.getFirstStatusId(),
+        resultId: null,
         deadline: null, 
-        called: null,
         comment: null,
         userIdCreation: teloUtil.getUserId(),
-        userIdLastUpdate: null
+        userIdLastUpdate: null,
+        dateLastUpdate: null
     };
 };

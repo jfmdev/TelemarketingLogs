@@ -2,5 +2,115 @@
 
 <div class="large-8 large-offset-2 columns">
     <div class="row">
+        <div class="right"><a ng-click="nextCall(1)">Next call <img src="img/icon/right.png" alt=">"/></a></div>
+        <div class="left"><a ng-click="nextCall(-1)"><img src="img/icon/left.png" alt="<"/> Previous call</a></div>
+    </div>
+    <div class="row" ng-show="editCall !== null">
+        <div class="panel callout radius call">
+            <div class="row">
+                <div class="large-12 columns">
+                    <strong>Contact</strong>
+                </div>
+            </div>
+            <div class="row details">
+                <div class="large-4 columns">
+                    <strong>Name:</strong> {{editContact.name}}
+                </div>
+                <div class="large-4 columns">
+                    <strong>Telephone:</strong> {{editContact.telephone}}
+                </div>
+                <div class="large-4 columns">
+                    <strong>Cellphone:</strong> {{editContact.cellphone}}
+                </div>
+            </div>
+            <div class="row details">
+                <div class="large-8 columns">
+                    <strong>Availability:</strong> {{editContact.availability}}
+                </div>
+                <div class="large-4 columns">
+                    <label>
+                        <input type="checkbox" ng-model="editMisc.notCallAgain" />
+                        Not call again to this contact
+                    </label>
+                </div>
+            </div>
+            <div class="row" ng-show="editContact.disable">
+                <span class="error">This contact has been disabled, indicating that this person/company must not be called again.</span>
+            </div>
+
+            <div class="row" style="margin-top: 10px;">
+                <div class="large-12 columns">
+                    <strong>Call</strong>
+                </div>
+            </div>
+
+            <div class="row details">
+                <div class="large-4 columns">
+                    <strong>Deadline:</strong> {{editCall.deadline}}
+                </div>
+                <div class="large-4 columns">
+                    <strong>Author:</strong> {{editCall.userCreation}}
+                </div>
+                <div class="large-4 columns">
+                    <label>
+                        <input type="checkbox" ng-model="editMisc.callAgainFlag" />
+                        Call again another day<span ng-show="editMisc.callAgainFlag">:</span>
+                        <quick-datepicker ng-show="editMisc.callAgainFlag" class="right" ng-model='editMisc.callAgainDate' disable-timepicker="true" placeholder="Select a date"></quick-datepicker>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row details">
+                <div class="large-12 columns">
+                    <strong>Comment</strong>
+                    <textarea ng-model="editMisc.comment"></textarea>
+                </div>
+            </div>
+            
+            <div class="row details">
+                <div class="large-4 columns">
+                    <strong>Status:</strong> 
+                    <select ng-model="editMisc.statusId" ng-options="status.id as status.name for status in statuses"></select>                
+                </div>
+                <div class="large-4 columns">
+                    <strong>Result:</strong>
+                    <select ng-model="editMisc.resultId" ng-options="result.id as result.name for result in results">
+                        <option value=""></option>
+                    </select>
+                </div>
+                <div class="large-4 columns">
+                    <div class="right"><strong><a class="button small" ng-click="saveAndNext()">Save & Continue</a></strong></div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <br/>
+    <div class="row"> 
+        <div ng-show="calls.length > 0"> 
+            <table class="calls">
+                 <thead>
+                    <tr>
+                       <th>Contact</th>
+                       <th>Status</th>
+                       <th>Result</th>
+                       <th>Deadline</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="call in prettyCalls | orderBy: contactId" ng-click="showCallDetails(call)" ng-class="editCall !== null && editCall.data.id === call.data.id? 'selected' : ''">
+                        <td>{{call.contact}}</td>
+                        <td>{{call.status}}</td>
+                        <td>{{call.result}}</td>
+                        <td>{{call.deadline}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br/>
+        </div> 
+
+        <div class="large-6 large-offset-3 text-center alert-box secondary radius" ng-show="calls.length <= 0">
+            This project has no calls assigned
+        </div>
     </div>
 </div>
