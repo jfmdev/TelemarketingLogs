@@ -25,12 +25,26 @@ teloCtrls.controller('NavBarController', function ($scope, $http, $location, $ro
     
     // Initialization function.
     $scope.init = function() {
-        // Load sample data.
-        $http.get('sample.json').success(function(response) {
-            teloUtil.fillDatabaseWithJson( response );
-            $scope.file = "Sample";
-            if(!$scope.$$phase) $scope.$apply();
-        });
+        // Verify if a backup was saved.
+        var backup = amplify.store("backup");
+        if(backup !== null) {
+            try{
+                // Restore backup.
+                teloUtil.fillDatabaseWithJson(backup);
+            }catch(e) {
+                backup = null;
+                console.log(e);
+            }
+        } 
+        
+        if(backup === null) {
+            // Load sample data.
+            $http.get('sample.json').success(function(response) {
+                teloUtil.fillDatabaseWithJson( response );
+                $scope.file = "Sample";
+                if(!$scope.$$phase) $scope.$apply();
+            });
+        }
     };
     
     // Clean the database.
