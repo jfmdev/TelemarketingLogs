@@ -75,6 +75,11 @@ teloCtrls.controller('NavBarController', function ($scope, $http, $location, $ro
             }
         });
     };
+
+    // Display the help.
+    $scope.help = function() {
+        introJs().start();
+    };
     
     // Export all data to a file.
     $scope.downloadData = function() {
