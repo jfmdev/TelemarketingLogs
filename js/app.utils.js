@@ -134,10 +134,10 @@ teloUtil.firstToUppercase = function(someString) {
  */
 teloUtil.canBeDeleted = function(entry) {
     if(entry.id === undefined || entry.id === null || entry.id < 0) return false;
-    if(entry.type === 'user' && (entry.name === teloUtil.getUserName() || taffyDB({type: 'call', user_id: entry.id}).count() > 0)) return false;
-    if(entry.type === 'result' && taffyDB({type: 'call', result_id: entry.id}).count() > 0) return false;
-    if(entry.type === 'status' && taffyDB({type: 'call', status_id: entry.id}).count() > 0) return false;
-    if(entry.type === 'contact' && taffyDB({type: 'call', contact_id: entry.id}).count() > 0) return false;
+    if(entry.type === 'user' && (entry.name === teloUtil.getUserName() || taffyDB({type: 'call', userIdCreation: entry.id}).count() > 0 || taffyDB({type: 'call', userIdLastUpdate: entry.id}).count() > 0)) return false;
+    if(entry.type === 'result' && taffyDB({type: 'call', resultId: entry.id}).count() > 0) return false;
+    if(entry.type === 'status' && taffyDB({type: 'call', statusId: entry.id}).count() > 0) return false;
+    if(entry.type === 'contact' && taffyDB({type: 'call', contactId: entry.id}).count() > 0) return false;
     return true;
 };
 

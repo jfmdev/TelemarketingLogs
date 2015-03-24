@@ -157,3 +157,9 @@ teloApp.factory('metadataFactory', function() {
     
     return factory;
 });
+
+// Before closing the application, make a backup of the current data.
+window.addEventListener("beforeunload", function (e) {
+    var jsonData = JSON.stringify( taffyDB().get() );
+    amplify.store("backup", jsonData);
+});
