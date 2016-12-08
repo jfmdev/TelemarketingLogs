@@ -16,7 +16,6 @@ Features
  * Export/Import your projects to JSON.
  * Let you organize your calls in projects.
  * Let you manage your list of contacts.
- * User guide inside the application.
 
 License
 -------
